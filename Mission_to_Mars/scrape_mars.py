@@ -57,14 +57,14 @@ def featured_image(browser):
 
 def mars_facts():
     try:
-        mars_df = pd.read_html('https://galaxyfacts-mars.com')[0]
+        mars_df = pd.read_html('https://galaxyfacts-mars.com/')[0]
     except BaseException:
         return None
 
     mars_df.columns = ['Description','Mars','Earth']
     mars_df.set_index('Description', inplace=True)
 
-    return mars_df.to_html()
+    return mars_df.to_html(classes="table table-striped")
     
 def mars_hemis(browser):
     url = 'https://marshemispheres.com/'
@@ -77,9 +77,10 @@ def mars_hemis(browser):
         hemi_soup = bs(html, 'html.parser')
         title = hemi_soup.find('h2', class_='title').text
         img_url = hemi_soup.find('li').a.get('href')
-        hemispheres = {}
-        hemispheres['img_url'] = f'https://marshemispheres.com/{img_url}'
-        hemispheres['title'] = title
+        hemispheres = {
+        "title": title,
+        "img_url": img_url
+    }
         hemis_urls.append(hemispheres)
         browser.back()
     return hemis_urls
